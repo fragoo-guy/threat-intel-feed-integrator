@@ -16,9 +16,13 @@ The project follows this implementation order: schema, feed normalization, inges
   - Hardened normalization to parse numeric Unix epoch timestamps seamlessly.
   - Aligned VirusTotal adapter for free-tier observable lookups and dynamic confidence scoring using analysis stats.
   - MISP remains deferred to static fixtures as specified.
-- [ ] **Phase 3: Scheduler, deduplication, and tagging** (next)
-  - Add APScheduler jobs, merge logic, provider evidence retention, and controlled tagging rules.
-- [ ] **Phase 4: FastAPI endpoints and search/filtering**
+- [x] **Phase 3: Scheduler, deduplication, and tagging**
+  - Implemented CTI tagging engine with regex-based keyword classification across 6 standard threat tags.
+  - Implemented multi-source deduplication and merging engine with evidence retention, timestamp bounds, and corroboration confidence boost.
+  - Built async MongoDB Atlas client lifecycle and IOCRepository with index creation and atomic upserts.
+  - Implemented APScheduler periodic ingestion and feed health tracker with isolated error handling.
+  - All 25 focused tests pass locally with zero API quota consumption.
+- [ ] **Phase 4: FastAPI endpoints and search/filtering** (next)
   - Add health, IOC query, metrics, detail, and export endpoints.
 - [ ] **Phase 5: Streamlit dashboard**
   - Add feed health, IOC metrics, filters, searchable results, and detail inspection.
@@ -27,7 +31,7 @@ The project follows this implementation order: schema, feed normalization, inges
 
 ## Current Phase Notes
 
-Phase 1 and Phase 2 are complete and hardened. 11 focused tests pass locally with zero quota usage. Ready to begin Phase 3 (Scheduler, Deduplication & MongoDB Ingestion).
+Phases 1, 2, and 3 are complete and tested. 25 unit tests pass locally with zero quota usage. Ready to begin Phase 4 (FastAPI endpoints and search/filtering).
 
 ## Phase Review Gate
 
@@ -46,7 +50,16 @@ Before starting the next phase, the current phase must be implemented, tested wi
 - Mocked HTTP tests verify header and body translation without live API calls.
 - Focused validation passed (`11 passed`).
 
+### Phase 3 Validation
+
+- Tagging rules map keywords and vendor clues to controlled threat tags (`malware`, `phishing`, `c2`, `botnet`, `exploit`, `suspicious`).
+- Deduplication engine merges duplicate IOCs, combines sources, preserves earliest `first_seen` / latest `last_seen`, and applies multi-source confidence boost.
+- Async MongoDB repository handles indexed queries, upserts, and metric aggregation.
+- Ingestion orchestrator isolates provider network failures and tracks feed health.
+- Focused validation passed (`25 passed`).
+
 ### Review Status
 
 - **Phase 1:** Reviewed and accepted by project owner.
-- **Phase 2:** Hardened and tested (`11 passed`). Awaiting sign-off to proceed to Phase 3.
+- **Phase 2:** Reviewed and accepted by project owner.
+- **Phase 3:** Completed and validated (`25 passed`). Awaiting sign-off to proceed to Phase 4.
