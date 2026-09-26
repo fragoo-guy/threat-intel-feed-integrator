@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 from datetime import datetime, timezone
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from app.db.repository import IOCRepository
+if TYPE_CHECKING:
+    from app.db.repository import IOCRepository
+
 from app.feeds.base import FeedAdapter
 from app.feeds.normalization import normalize_record
 from app.services.tagging import enrich_threat_tags

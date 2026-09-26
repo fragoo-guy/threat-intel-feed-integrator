@@ -14,7 +14,8 @@ class MongoDBManager:
 
     @classmethod
     def get_db_name(cls) -> str:
-        return os.getenv("MONGODB_DB_NAME", "threat_intel")
+        return os.getenv("MONGODB_DATABASE") or os.getenv("MONGODB_DB_NAME", "threat_intel")
+
 
     @classmethod
     def connect(cls) -> None:

@@ -5,7 +5,6 @@ from typing import Any
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from app.db.mongodb import get_db
-from app.db.repository import IOCRepository
 from app.feeds.abuseipdb import AbuseIPDBAdapter
 from app.feeds.otx import OTXAdapter
 from app.feeds.virustotal import VirusTotalAdapter
@@ -23,7 +22,7 @@ class ThreatFeedScheduler:
         """Register periodic ingestion jobs for available provider adapters."""
         otx_key = os.getenv("OTX_API_KEY", "")
         abuse_key = os.getenv("ABUSEIPDB_API_KEY", "")
-        vt_key = os.getenv("VIRUSTOTAL_API_KEY", "")
+        vt_key = os.getenv("VIRUSTOTAL_API_KEY") or os.getenv("VT_API_KEY", "")
 
         # Default poll intervals in minutes
         otx_interval = int(os.getenv("OTX_POLL_INTERVAL_MINUTES", "60"))
@@ -78,6 +77,7 @@ class ThreatFeedScheduler:
             logger.warning("OTX API key not configured; skipping job")
             return {"status": "skipped", "reason": "missing_api_key"}
 
+        from app.db.repository import IOCRepository
         repo = IOCRepository(get_db())
         service = IngestionService(repo)
         adapter = OTXAdapter(api_key=otx_key)
@@ -92,6 +92,7 @@ class ThreatFeedScheduler:
             logger.warning("AbuseIPDB API key not configured; skipping job")
             return {"status": "skipped", "reason": "missing_api_key"}
 
+        from app.db.repository import IOCRepository
         repo = IOCRepository(get_db())
         service = IngestionService(repo)
         adapter = AbuseIPDBAdapter(api_key=abuse_key)
@@ -101,11 +102,12 @@ class ThreatFeedScheduler:
             await adapter.aclose()
 
     async def _run_virustotal_job(self) -> dict[str, Any]:
-        vt_key = os.getenv("VIRUSTOTAL_API_KEY", "")
+        vt_key = os.getenv("VIRUSTOTAL_API_KEY") or os.getenv("VT_API_KEY", "")
         if not vt_key:
             logger.warning("VirusTotal API key not configured; skipping job")
             return {"status": "skipped", "reason": "missing_api_key"}
 
+        from app.db.repository import IOCRepository
         repo = IOCRepository(get_db())
         service = IngestionService(repo)
         adapter = VirusTotalAdapter(api_key=vt_key)
