@@ -22,8 +22,11 @@ env/
 # Local databases, exports, and runtime files
 *.sqlite3
 *.db
+*.csv
+*stix*.json
 /exports/
 /logs/
+
 
 # Tooling and OS files
 .vscode/
