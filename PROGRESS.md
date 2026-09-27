@@ -27,14 +27,21 @@ The project follows this implementation order: schema, feed normalization, inges
   - Implemented REST endpoints: system/feed health (`/health`, `/api/v1/health`), SOC metrics (`/api/v1/metrics`), filtered & paginated IOC query (`/api/v1/iocs`), single IOC inspection (`/api/v1/iocs/{deduplication_key}`), and on-demand feed sync (`/api/v1/feeds/{provider}/sync`).
   - Implemented SOC export serializers: analyst CSV export (`/api/v1/export/csv`) and standard STIX 2.1 JSON bundle export (`/api/v1/export/stix`).
   - All 35 focused tests pass locally with zero API quota consumption.
-- [ ] **Phase 5: Streamlit dashboard** (next)
-  - Add feed health, IOC metrics, filters, searchable results, and detail inspection.
-- [ ] **Phase 6: Testing, documentation, and deployment guidance**
-  - Add unit/integration tests, update operational documentation, and describe free GitHub deployment options without requiring paid services.
+- [x] **Phase 5: Streamlit dashboard**
+  - Built interactive Streamlit SOC dashboard in `dashboard/app.py` with dark cybersecurity visual theme.
+  - Implemented decoupled API client in `dashboard/api_client.py` connecting strictly to FastAPI REST endpoints without direct database access.
+  - Added executive SOC metric cards, threat tag distribution charts, and indicator type distribution charts.
+  - Added live filter and regex search controls (indicator, type, tag, provider, confidence score, page limit).
+  - Built deep-dive indicator inspector with corroborating source evidence, observation timeline, MITRE ATT&CK® Enterprise TTP mapping, and automated Suricata / Snort NIDS rule generation.
+  - Added 1-click CSV and STIX 2.1 JSON bundle export download controls.
+  - Added 10 automated unit tests for dashboard client and utilities (`tests/test_dashboard.py`).
+  - All 45 focused tests pass locally with zero API quota consumption.
+- [ ] **Phase 6: Testing, documentation, and deployment guidance** (next)
+  - Add end-to-end integration tests, update operational documentation with screenshots/GIF guidance, add GitHub Actions CI workflow, and describe free deployment options.
 
 ## Current Phase Notes
 
-Phases 1, 2, 3, and 4 are complete and tested. 35 unit tests pass locally with zero quota usage. Ready to begin Phase 5 (Streamlit SOC dashboard).
+Phases 1, 2, 3, 4, and 5 are complete and tested. 45 unit tests pass locally with zero quota usage. Ready to begin Phase 6 (Testing, documentation, CI/CD, and deployment guidance).
 
 ## Phase Review Gate
 
@@ -68,10 +75,21 @@ Before starting the next phase, the current phase must be implemented, tested wi
 - Export endpoints produce downloadable analyst CSV spreadsheets and compliant STIX 2.1 JSON bundles.
 - Focused validation passed (`35 passed`).
 
+### Phase 5 Validation
+
+- Streamlit SOC dashboard serves as an operational interface connecting strictly to FastAPI backend.
+- Feed status pills show provider health with manual on-demand sync triggers.
+- Threat distribution visualizations render breakdown of active IOCs across tags and observable types.
+- Deep-dive inspector maps threat tags to MITRE ATT&CK techniques and generates ready-to-deploy Suricata NIDS rules.
+- Analyst export center enables one-click downloads for CSV and STIX 2.1 bundles.
+- Focused validation passed (`45 passed`).
+
 ### Review Status
 
 - **Phase 1:** Reviewed and accepted by project owner.
 - **Phase 2:** Reviewed and accepted by project owner.
 - **Phase 3:** Reviewed and accepted by project owner.
-- **Phase 4:** Completed and validated (`35 passed`). Ready to proceed to Phase 5.
+- **Phase 4:** Reviewed and accepted by project owner.
+- **Phase 5:** Completed and validated (`45 passed`). Ready to proceed to Phase 6.
+
 
