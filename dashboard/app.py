@@ -1,12 +1,24 @@
 import json
 import os
+from pathlib import Path
+import sys
 from typing import Any
+
+# Ensure project root is in sys.path so modules resolve whether run from root or dashboard dir
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 import pandas as pd
 import streamlit as st
 
-from dashboard.api_client import ThreatIntelAPIClient
-from dashboard.mitre import generate_suricata_rule, get_mitre_context
+try:
+    from dashboard.api_client import ThreatIntelAPIClient
+    from dashboard.mitre import generate_suricata_rule, get_mitre_context
+except ModuleNotFoundError:
+    from api_client import ThreatIntelAPIClient
+    from mitre import generate_suricata_rule, get_mitre_context
+
 
 # ---------------------------------------------------------
 # Page Configuration & Styling
