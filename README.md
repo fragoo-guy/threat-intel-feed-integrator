@@ -76,6 +76,9 @@ flowchart TD
    - Real-time telemetry cards, interactive distribution charts, filterable investigation grid, and deep-dive evidence inspection drawers.
 7. **Resilient Offline / Demo Mode**:
    - Operates smoothly out-of-the-box with pre-seeded realistic threat intelligence even if external databases or API keys are unavailable.
+8. **Decoupled Enterprise Architecture**:
+   - The operator-facing Streamlit dashboard strictly interacts through validated FastAPI REST endpoints with zero direct database coupling.
+
 
 ---
 
